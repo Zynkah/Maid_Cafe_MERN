@@ -10,6 +10,21 @@ const banquetRouter = require("./routes/banquetRouter");
 const maidRouter = require("./routes/maidRouter");
 const menuRouter = require("./routes/menuRouter");
 
+const mongoose = require('mongoose');
+
+
+const url = 'mongodb://localhost:27017/maidCafe';
+const connect = mongoose.connect(url, {
+  useCreatIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+connect.then(() => {
+  console.log('Connected correctly to server');
+  (err) => console.log(err)
+})
+
 const app = express();
 
 // view engine setup
