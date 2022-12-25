@@ -18,7 +18,8 @@ const maidSchema = new Schema(
       required: true,
     },
     featured: {
-      required: true,
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
