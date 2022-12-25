@@ -12,7 +12,6 @@ const menuRouter = require("./routes/menuRouter");
 
 const mongoose = require('mongoose');
 
-
 const url = 'mongodb://localhost:27017/maidCafe';
 const connect = mongoose.connect(url, {
   useCreatIndex: true,

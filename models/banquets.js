@@ -14,6 +14,7 @@ const banquetSchema = new Schema(
       unique: true,
     },
     image: {
+      type: String,
       required: true,
     },
     cost: {
