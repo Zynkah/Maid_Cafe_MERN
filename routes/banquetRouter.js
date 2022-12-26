@@ -1,40 +1,53 @@
 const express = require("express");
+const Banquets = require("../models/banquets");
+
 const banquetRouter = express.Router();
 
 banquetRouter
   .route("/")
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    next();
+  .get((req, res, next) => {
+    Banquets.find()
+      .then((banquet) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(banquet);
+      })
+      .catch((err) => next(err));
   })
-  .get((req, res) => {
-    res.end("Will send all the banquets to you");
-  })
-  .post((req, res) => {
-    res.end(
-      `Will add the banquet: ${req.body.name} with description: ${req.body.description}`
-    );
+  .post((req, res, next) => {
+    Banquets.create(req.body)
+      .then((banquet) => {
+        console.log("Banquets Created ", banquet);
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(banquet);
+      })
+      .catch((err) => next(err));
   })
   .put((req, res) => {
     res.statusCode = 403;
     res.end("PUT operation not supported on /banquets");
   })
-  .delete((req, res) => {
-    res.end("Deleting all banquets");
+  .delete((req, res, next) => {
+    Banquets.deleteMany()
+      .then((response) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(response);
+      })
+      .catch((err) => next(err));
   });
 
 banquetRouter
   .route("/:banquetId")
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    next();
-  })
-  .get((req, res) => {
-    res.end(
-      `Will send details of the banquet: ${req.params.banquetId} to you`
-    );
+  .get((req, res, next) => {
+    Banquets.findById(req.params.banquetId)
+      .then((banquet) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(banquet);
+      })
+      .catch((err) => next(err));
   })
   .post((req, res) => {
     res.statusCode = 403;
@@ -42,13 +55,29 @@ banquetRouter
       `POST operation not supported on /banquets/${req.params.banquetId}`
     );
   })
-  .put((req, res) => {
-    res.write(`Updating the banquet: ${req.params.banquetId}\n`);
-    res.end(`Will update the banquet: ${req.body.name}
-        with description: ${req.body.description}`);
+  .put((req, res, next) => {
+    Banquets.findByIdAndUpdate(
+      req.params.banquetId,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    )
+      .then((banquet) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(banquet);
+      })
+      .catch((err) => next(err));
   })
-  .delete((req, res) => {
-    res.end(`Deleting banquet: ${req.params.banquetId}`);
+  .delete((req, res, next) => {
+    Banquets.findByIdAndDelete(req.params.banquetId)
+      .then((response) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(response);
+      })
+      .catch((err) => next(err));
   });
 
 module.exports = banquetRouter;

@@ -20,7 +20,7 @@ const banquetSchema = new Schema(
       type: String,
       required: true,
     },
-    cost: {
+    price: {
       type: Currency,
       required: true,
       min: 0,
@@ -33,6 +33,6 @@ const banquetSchema = new Schema(
   { timestamps: true }
 );
 
-const Banquets = mongoose.model("Menu", banquetSchema);
+const Banquets = mongoose.model("Banquets", banquetSchema);
 
 module.exports = Banquets;

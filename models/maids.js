@@ -25,6 +25,6 @@ const maidSchema = new Schema(
   { timestamps: true }
 );
 
-const Maids = mongoose.model("Menu", maidSchema);
+const Maids = mongoose.model("Maids", maidSchema);
 
 module.exports = Maids;

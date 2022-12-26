@@ -42,7 +42,7 @@ const menuSchema = new Schema(
       type: String,
       required: true,
     },
-    cost: {
+    price: {
       type: Currency,
       required: true,
       min: 0,
