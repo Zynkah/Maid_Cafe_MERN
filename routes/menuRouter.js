@@ -1,5 +1,6 @@
 const express = require("express");
 const Menu = require("../models/menu");
+const authenticate = require("../authenticate");
 
 const menuRouter = express.Router();
 
@@ -14,7 +15,7 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res, next) => {
+  .post(authenticate.verifyUser, (req, res, next) => {
     Menu.create(req.body)
       .then((menu) => {
         console.log("Menu Created ", menu);
@@ -24,11 +25,11 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .put((req, res) => {
+  .put(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end("PUT operation not supported on /menus");
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Menu.deleteMany()
       .then((response) => {
         res.statusCode = 200;
@@ -49,11 +50,11 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res) => {
+  .post(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /menus/${req.params.menuId}`);
   })
-  .put((req, res, next) => {
+  .put(authenticate.verifyUser, (req, res, next) => {
     Menu.findByIdAndUpdate(
       req.body.menuId,
       {
@@ -68,7 +69,7 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Menu.findByIdAndDelete(req.body.menuId)
       .then((response) => {
         res.statusCode = 200;
@@ -95,7 +96,7 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res, next) => {
+  .post(authenticate.verifyUser, (req, res, next) => {
     Menu.findById(req.params.menuId)
       .then((menu) => {
         if (menu) {
@@ -116,13 +117,13 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .put((req, res) => {
+  .put(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(
       `PUT operation not supported on /menus/${req.params.menuId}/comments`
     );
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Menu.deleteMany();
     Menu.findById(req.params.menuId)
       .then((menu) => {
@@ -168,13 +169,13 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res) => {
+  .post(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(
       `POST operation not supported on /menu/${req.params.menuId}/comments/${req.params.commentId}`
     );
   })
-  .put((req, res, next) => {
+  .put(authenticate.verifyUser, (req, res, next) => {
     Menu.findById(req.params.menuId)
       .then((menu) => {
         if (menu && menu.comments.id(req.params.commentId)) {
@@ -204,7 +205,7 @@ menuRouter
       })
       .catch((err) => next(err));
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Menu.deleteMany();
     Menu.findById(req.params.menuId)
       .then((menu) => {

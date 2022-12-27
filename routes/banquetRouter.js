@@ -1,5 +1,6 @@
 const express = require("express");
 const Banquets = require("../models/banquets");
+const authenticate = require("../authenticate");
 
 const banquetRouter = express.Router();
 
@@ -14,7 +15,7 @@ banquetRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res, next) => {
+  .post(authenticate.verifyUser, (req, res, next) => {
     Banquets.create(req.body)
       .then((banquet) => {
         console.log("Banquets Created ", banquet);
@@ -24,11 +25,11 @@ banquetRouter
       })
       .catch((err) => next(err));
   })
-  .put((req, res) => {
+  .put(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end("PUT operation not supported on /banquets");
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Banquets.deleteMany()
       .then((response) => {
         res.statusCode = 200;
@@ -49,13 +50,13 @@ banquetRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res) => {
+  .post(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(
       `POST operation not supported on /banquets/${req.params.banquetId}`
     );
   })
-  .put((req, res, next) => {
+  .put(authenticate.verifyUser, (req, res, next) => {
     Banquets.findByIdAndUpdate(
       req.params.banquetId,
       {
@@ -70,7 +71,7 @@ banquetRouter
       })
       .catch((err) => next(err));
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Banquets.findByIdAndDelete(req.params.banquetId)
       .then((response) => {
         res.statusCode = 200;

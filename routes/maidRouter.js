@@ -1,5 +1,6 @@
 const express = require("express");
 const Maids = require("../models/maids");
+const authenticate = require("../authenticate");
 
 const maidRouter = express.Router();
 
@@ -14,7 +15,7 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res, next) => {
+  .post(authenticate.verifyUser, (req, res, next) => {
     Maids.create(req.body)
       .then((maid) => {
         console.log("Maid Created ", maid);
@@ -24,11 +25,11 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .put((req, res) => {
+  .put(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end("PUT operation not supported on /maids");
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Maids.deleteMany()
       .then((response) => {
         res.statusCode = 200;
@@ -49,11 +50,11 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .post((req, res) => {
+  .post(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /maids/${req.params.maidId}`);
   })
-  .put((req, res, next) => {
+  .put(authenticate.verifyUser, (req, res, next) => {
     Maids.findById(
       req.params.maidId,
       {
@@ -68,7 +69,7 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .delete((req, res, next) => {
+  .delete(authenticate.verifyUser, (req, res, next) => {
     Maids.findByIdAndDelete(req.params.maidId)
       .then((response) => {
         res.statusCode = 200;
