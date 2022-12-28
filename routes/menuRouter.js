@@ -8,6 +8,7 @@ menuRouter
   .route("/")
   .get((req, res, next) => {
     Menu.find()
+      .populate("comments.author")
       .then((menu) => {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
@@ -43,6 +44,7 @@ menuRouter
   .route("/:menuId")
   .get((req, res, next) => {
     Menu.findById(req.params.menuId)
+      .populate("comments.author")
       .then((menu) => {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
@@ -83,6 +85,7 @@ menuRouter
   .route("/:menuId/comments")
   .get((req, res, next) => {
     Menu.findById(req.params.menuId)
+      .populate("comments.author")
       .then((menu) => {
         if (menu) {
           res.statusCode = 200;
@@ -100,6 +103,7 @@ menuRouter
     Menu.findById(req.params.menuId)
       .then((menu) => {
         if (menu) {
+          req.body.author = req.user._id;
           menu.comments.push(req.body);
           menu
             .save()
@@ -152,6 +156,7 @@ menuRouter
   .route("/:menuId/comments/:commentId")
   .get((req, res, next) => {
     Menu.findById(req.params.menuId)
+      .populate("comments.author")
       .then((menu) => {
         if (menu && menu.comments.id(req.params.commentId)) {
           res.statusCode = 200;
