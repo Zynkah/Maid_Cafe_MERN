@@ -1,12 +1,14 @@
 const express = require("express");
 const Maids = require("../models/maids");
 const authenticate = require("../authenticate");
+const cors = require('./cors');
 
 const maidRouter = express.Router();
 
 maidRouter
   .route("/")
-  .get((req, res, next) => {
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
     Maids.find()
       .then((maid) => {
         res.statusCode = 200;
@@ -15,7 +17,7 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Maids.create(req.body)
       .then((maid) => {
         console.log("Maid Created ", maid);
@@ -25,11 +27,11 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .put(authenticate.verifyUser, (req, res) => {
+  .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end("PUT operation not supported on /maids");
   })
-  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Maids.deleteMany()
       .then((response) => {
         res.statusCode = 200;
@@ -41,7 +43,8 @@ maidRouter
 
 maidRouter
   .route("/:maidId")
-  .get((req, res, next) => {
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
     Maids.findById(req.params.maidId)
       .then((maid) => {
         res.statusCode = 200;
@@ -50,11 +53,11 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .post(authenticate.verifyUser, (req, res) => {
+  .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /maids/${req.params.maidId}`);
   })
-  .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Maids.findById(
       req.params.maidId,
       {
@@ -69,7 +72,7 @@ maidRouter
       })
       .catch((err) => next(err));
   })
-  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Maids.findByIdAndDelete(req.params.maidId)
       .then((response) => {
         res.statusCode = 200;
