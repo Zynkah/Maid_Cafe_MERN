@@ -6,15 +6,15 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   firstname: {
     type: String,
-    default: ''
-},
-lastname: {
+    default: "",
+  },
+  lastname: {
     type: String,
-    default: ''
-},
+    default: "",
+  },
   admin: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    type: Boolean,
+    default: false,
   },
 });
 

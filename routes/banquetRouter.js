@@ -15,7 +15,7 @@ banquetRouter
       })
       .catch((err) => next(err));
   })
-  .post(authenticate.verifyUser, (req, res, next) => {
+  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Banquets.create(req.body)
       .then((banquet) => {
         console.log("Banquets Created ", banquet);
@@ -29,7 +29,7 @@ banquetRouter
     res.statusCode = 403;
     res.end("PUT operation not supported on /banquets");
   })
-  .delete(authenticate.verifyUser, (req, res, next) => {
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Banquets.deleteMany()
       .then((response) => {
         res.statusCode = 200;
@@ -56,7 +56,7 @@ banquetRouter
       `POST operation not supported on /banquets/${req.params.banquetId}`
     );
   })
-  .put(authenticate.verifyUser, (req, res, next) => {
+  .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Banquets.findByIdAndUpdate(
       req.params.banquetId,
       {
@@ -71,7 +71,7 @@ banquetRouter
       })
       .catch((err) => next(err));
   })
-  .delete(authenticate.verifyUser, (req, res, next) => {
+  .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Banquets.findByIdAndDelete(req.params.banquetId)
       .then((response) => {
         res.statusCode = 200;

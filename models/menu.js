@@ -18,7 +18,7 @@ const commentSchema = new Schema(
     },
     author: {
       type: String,
-      ref: "User",
+      required: true,
     },
   },
   {
