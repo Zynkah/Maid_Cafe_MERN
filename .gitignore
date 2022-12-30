@@ -1,2 +1,4 @@
 node_modules
 UML
+bin/server.cert
+bin/server.key
