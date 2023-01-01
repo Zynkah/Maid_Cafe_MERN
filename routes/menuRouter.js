@@ -10,7 +10,6 @@ menuRouter
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, (req, res, next) => {
     Menu.find()
-      .populate("comments.author")
       .then((menu) => {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
