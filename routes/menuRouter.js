@@ -117,7 +117,7 @@ menuRouter
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, (req, res, next) => {
     Menu.findById(req.params.menuId)
-      .populate("comments.author")
+
       .then((menu) => {
         if (menu) {
           res.statusCode = 200;
@@ -194,7 +194,6 @@ menuRouter
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, (req, res, next) => {
     Menu.findById(req.params.menuId)
-      .populate("comments.author")
       .then((menu) => {
         if (menu && menu.comments.id(req.params.commentId)) {
           res.statusCode = 200;
